@@ -1,0 +1,9 @@
+name: crystal-primitives
+version: 0.1.0
+
+authors:
+  - Agustin Garassino <ajgarassino@gmail.com>
+
+crystal: '>= 1.10.1'
+
+license: MIT
