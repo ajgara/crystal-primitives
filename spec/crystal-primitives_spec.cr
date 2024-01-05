@@ -3,20 +3,49 @@ require "./spec_helper"
 include CrystalPrimitives
 
 describe CrystalPrimitives do
+
+
+
+
   describe "#==" do
-    it "three modulo 7 is equal to 10 modulo 7" do
-      x = FE7.new BigInt.new 3
-      y = FE7.new BigInt.new 10
+    
+    it "131072 and 1 are the same element in a Finite Field of order 131071" do
+      x = FieldElement.new BigInt.new 131072
+      y = FieldElement.new BigInt.new 1
+      x.should eq(y)
+    end
+
+    it "three modulo 131071 is equal to 131074 modulo 131071" do
+      x = FieldElement.new BigInt.new 3
+      y = FieldElement.new BigInt.new 131074
       x.should eq(y)
     end
   end
 
   describe "#+" do
     it "works" do
-      x = FE7.new BigInt.new 3
-      y = FE7.new BigInt.new 250
+      x = FieldElement.new BigInt.new 2
+      y = FieldElement.new BigInt.new 126
       z = x + y
-      #(x + y).should eq(FE7.new BigInt.new 1)
+      (x + y).should eq(FieldElement.new BigInt.new 128)
     end
   end
+
+  describe "#PublicValues" do
+    
+    it "q is well defined" do
+      ((PublicValues.p() -1)%PublicValues.q()).should eq(0)
+    end
+
+    it "z is well defined" do
+      ((PublicValues.p() - 1)/PublicValues.q).should eq(PublicValues.z)
+    end
+
+    it "generator g is well defined" do
+      puts PublicValues.g
+      (PublicValues.g).should be > 1
+    end
+
+  end
+
 end
