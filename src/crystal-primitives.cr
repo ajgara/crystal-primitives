@@ -24,8 +24,22 @@ module CrystalPrimitives
         self.class.new ((self.number + other.number) % @@prime)
       end
 
+      def *(other : FieldElement)
+        self.class.new ((self.number * other.number) % @@prime)
+      end
+
+      def inverseOf()
+        s, t = euclidesAlgorithm(self.number(), @@prime)
+        inverse = s%@@prime
+        return self.class.new inverse
+      end
+
       def ==(other : FieldElement)
         self.number == other.number
+      end
+
+      def **(exponent : BigInt)
+        self.class.new (self.number ** exponent) % @@prime
       end
   
       def to_s(io : IO) : Nil
@@ -60,14 +74,35 @@ module CrystalPrimitives
 
   end
 
+
   class Signer
+    @privateKey : BigInt
+    @publicKey : FieldElement
+
+    def initialize()
+      @privateKey = Random.rand(PublicValues.q() -1)
+      @publicKey = (FieldElement.new(PublicValues.g())) ** @privateKey
+    end
+
+    def publicKey
+      @publicKey
+    end
+
+    # def sign(message, )
+    #   k = Random.rand(PublicValues.q() -1)
+
+    #   r = FieldElement.new(PublicValues.g()) ** k
+
+    #   s = 
+  
   end
 
 
 
   def sign() #messageHash : BigInt, privateKey: BigInt
-    puts PublicValues.p
-    puts PublicValues.q
+    #puts PublicValues.p
+    #puts PublicValues.q
+    puts "hello"
   end
 
 end  
