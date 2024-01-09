@@ -30,6 +30,12 @@ def euclidesAlgorithm(a : BigInt, b : BigInt)
     return s0, t0
 end
 
+def inverse_mod_q(number : BigInt, mod : BigInt)
+    inverse, t = euclidesAlgorithm(number, mod)
+    inverse = inverse % mod
+    return inverse
+end
+
 a = BigInt.new 28218902
 b = BigInt.new 21890213980
 

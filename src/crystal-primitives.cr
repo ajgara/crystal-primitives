@@ -88,21 +88,57 @@ module CrystalPrimitives
       @publicKey
     end
 
-    # def sign(message, )
-    #   k = Random.rand(PublicValues.q() -1)
+    def sign(messageHash : BigInt)
+      
+      r_as_field_element = FieldElement.new BigInt.new 0
 
-    #   r = FieldElement.new(PublicValues.g()) ** k
+      while r_as_field_element == FieldElement.new BigInt.new 0
+        k = Random.rand((PublicValues.q() - 1).as(Int))
+        r_as_field_element = FieldElement.new(PublicValues.g()) ** k
+        r = r_as_field_element.number() % PublicValues.q()
+      end
 
-    #   s = 
-  
+      #inverse of k      
+      inverse_k, t = euclidesAlgorithm(k.as(BigInt), PublicValues.q())
+      inverse_k = inverse_k % PublicValues.q()
+
+      s =  inverse_k * (messageHash + @privateKey*r.as(BigInt))
+      s = s.as(BigInt)% PublicValues.q()
+      r = r.as(BigInt)%PublicValues.q()
+
+      return r, s
+    end
+
   end
 
 
+  def verify_signature(signer : Signer, r : BigInt, s : BigInt, messageHash : BigInt)
+    
+    q = PublicValues.q()
+    
+    if r >= q
+      puts r
+      return false
+    end
+    if s >= q
+      puts s
+      return false
+    end
 
-  def sign() #messageHash : BigInt, privateKey: BigInt
-    #puts PublicValues.p
-    #puts PublicValues.q
-    puts "hello"
+    
+
+    w = inverse_mod_q(s, q)
+
+    u1 = (messageHash * w) % q
+    u2 = (r*w) % q
+
+    #computation of v
+    g = FieldElement.new PublicValues.g()
+    factor1 = (g**u1)
+    factor2 = (signer.publicKey()**u2)
+    v = ((factor1 * factor2).number()) % q
+
+    return v == r
   end
 
 end  

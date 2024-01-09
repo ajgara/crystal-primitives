@@ -31,6 +31,15 @@ describe CrystalPrimitives do
     end
   end
 
+  describe "·*" do
+    it "works" do
+      x = FieldElement.new BigInt.new 257
+      y = FieldElement.new BigInt.new 510
+      z = x * y
+      z.should eq(FieldElement.new BigInt.new 131070)
+    end
+  end
+
   describe "#**" do
     it "can do a small exponentation" do 
       x = FieldElement.new BigInt.new 2
@@ -73,13 +82,33 @@ describe CrystalPrimitives do
 
   describe "#Signer" do
 
-    it "is well initialized" do
+    it "it initializes and signs a message without errors" do
       signer = Signer.new
+      signer.sign(BigInt.new 100)
     end
 
 
   end
 
+  describe "#verify" do
 
+    it "should be false if signature is too large" do
+      signer = Signer.new
+      message = BigInt.new 100
+      r, s = signer.sign(message)
+
+      result = verify_signature(signer, BigInt.new(300), BigInt.new(300), message)
+      result.should be_falsey
+    end
+
+    it "should verify well signed message" do
+      signer = Signer.new
+      message = BigInt.new 100
+      r, s = signer.sign(message)
+
+      result = verify_signature(signer, r.as(BigInt), s.as(BigInt), message)
+      result.should be_truthy
+    end
+  end
 
 end
