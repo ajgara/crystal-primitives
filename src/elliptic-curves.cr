@@ -24,9 +24,9 @@ module EllipticCurves
         end
 
         def self.initialize_from_x(x : FieldElement)
-            three = BigInt.new(3)
+            three = BigInt.new(2)
             y = x**three + @@a*x + @@b
-            y = y.squareRoot() 
+            y  = y.squareRoot() 
             point = self.new(x, y)
             puts point.point()
             return point
@@ -61,16 +61,18 @@ include EllipticCurves
 describe EllipticCurves do
 
     describe "EllipticCurvePoint" do
-        it "can initialize from first coordinate x" do
+        it "can initialize from first coordinate x and compare to start initialization" do
             x = FieldElement.new(BigInt.new 1)
             p = EllipticCurvePoint.initialize_from_x(x)
-            p.should eq(EllipticCurvePoint.new(FieldElement.new(BigInt.new 1), FieldElement.new(BigInt.new 1024)))
+            other_point = EllipticCurvePoint.new(FieldElement.new(BigInt.new 1), FieldElement.new(BigInt.new 1024))
+            p.should eq(other_point)
         end
 
-        # it "equality operator works" do
-        #     x = FieldElement.new(1)
-
-        #     y = BigInt.new("")
+        it "equality operator works" do
+            x = FieldElement.new(BigInt.new 7)
+            p = EllipticCurvePoint.initialize_from_x(x)
+            puts p
+        end
 
 
         #     p = EllipticCurvePoint.initialize_from_x(x)

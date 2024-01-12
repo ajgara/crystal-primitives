@@ -2,5 +2,4 @@
 
 TODO:
 
-tengo la operacion inversa y la multiplicacion, ya tengo todo para definir la firma siguiendo a wikipedia
-seria elegir el k, el R y firmar y devolver el par de la firma. luego hacer una clase verifier que verifica la firma :)
+intentando definir los puntos desde la curva desde un X. me tira error en la creacion de la curva cuando yo esperaria que el error es de la raiz cuadrada. me gustaria imprimir el error desde el test y no puedo

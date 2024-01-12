@@ -48,6 +48,9 @@ module CrystalPrimitives
         exponent = exponent // BigInt.new(4)
 
         result = self**exponent
+        if result**(BigInt.new(2)) != self
+          raise ArgumentError.new("element does not have a square root")
+        end
         return result
       end
 

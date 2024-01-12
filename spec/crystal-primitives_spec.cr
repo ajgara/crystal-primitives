@@ -68,8 +68,15 @@ describe CrystalPrimitives do
       two = BigInt.new(2)
       (sqrtX**two).should eq(x)
     end
+
+    it "raises error if field element does not have squareroot" do
+      x = FieldElement.new BigInt.new 3
+      expect_raises(ArgumentError) do
+        sqrtX = x.squareRoot()
+      end
+    end
   end
-  
+
   it "can do the inverse" do
     x = FieldElement.new BigInt.new 2
     inverse = x.inverseOf()
