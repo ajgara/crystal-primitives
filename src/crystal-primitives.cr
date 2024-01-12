@@ -42,6 +42,15 @@ module CrystalPrimitives
         self.class.new (self.number ** exponent) % @@prime
       end
   
+      def squareRoot()
+
+        exponent = @@prime + BigInt.new(1)
+        exponent = exponent // BigInt.new(4)
+
+        result = self**exponent
+        return result
+      end
+
       def to_s(io : IO) : Nil
           io.print self.number
       end

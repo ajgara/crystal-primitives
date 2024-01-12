@@ -54,11 +54,27 @@ describe CrystalPrimitives do
       (result).should eq(FieldElement.new BigInt.new 1)
     end
 
-    it "can do the inverse" do
+  describe "#squareroot" do
+    it "can do the squareroot of 2" do
       x = FieldElement.new BigInt.new 2
-      inverse = x.inverseOf()
-      (x*inverse).should eq(FieldElement.new BigInt.new 1)
+      sqrtX = x.squareRoot()
+      two = BigInt.new(2)
+      (sqrtX**two).should eq(x)
     end
+
+    it "can do the squareroot of 100" do
+      x = FieldElement.new BigInt.new 100
+      sqrtX = x.squareRoot()
+      two = BigInt.new(2)
+      (sqrtX**two).should eq(x)
+    end
+  end
+  
+  it "can do the inverse" do
+    x = FieldElement.new BigInt.new 2
+    inverse = x.inverseOf()
+    (x*inverse).should eq(FieldElement.new BigInt.new 1)
+  end
 
   end
 
