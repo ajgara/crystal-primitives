@@ -1,6 +1,6 @@
 require "big"
 #require "logger"
-
+require "./euclides-algorithm.cr"
 #log = Logger.new(STDOUT)
 #log.level = Logger::ERROR
 
@@ -32,6 +32,10 @@ module CrystalPrimitives
         s, t = euclidesAlgorithm(self.number(), @@prime)
         inverse = s%@@prime
         return self.class.new inverse
+      end
+
+      def -(other : FieldElement)
+        self.class.new ((self.number - other.number) % @@prime)
       end
 
       def ==(other : FieldElement)
