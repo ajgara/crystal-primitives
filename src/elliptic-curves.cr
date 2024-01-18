@@ -101,6 +101,20 @@ module EllipticCurves
             return EllipticCurvePoint.new(x3, y3)
         end
 
+        def scalar_mul(k : BigInt) # untested
+            index = k
+            partial_result = self.class.initialize_infinity_point()
+
+            if index < 0
+                raise ArgumentError.new("scalar must be positive")
+            end
+
+            while index > 0 
+                partial_result = partial_result + self
+                index = index-1
+            end
+            return partial_result
+        end
     end
 end
 require "spec"
