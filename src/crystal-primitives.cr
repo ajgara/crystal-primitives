@@ -20,22 +20,15 @@ module CrystalPrimitives
       end
   
       def +(other : FieldElement)
-        #Log.error("before describe works")
         self.class.new ((self.number + other.number) % @@prime)
-      end
-
-      def *(other : FieldElement)
-        self.class.new ((self.number * other.number) % @@prime)
-      end
-
-      def inverseOf()
-        s, t = euclidesAlgorithm(self.number(), @@prime)
-        inverse = s%@@prime
-        return self.class.new inverse
       end
 
       def -(other : FieldElement)
         self.class.new ((self.number - other.number) % @@prime)
+      end
+
+      def *(other : FieldElement)
+        self.class.new ((self.number * other.number) % @@prime)
       end
 
       def ==(other : FieldElement)
@@ -46,15 +39,23 @@ module CrystalPrimitives
         self.class.new (self.number ** exponent) % @@prime
       end
   
+      def inverseOf()
+        s, t = euclidesAlgorithm(self.number(), @@prime)
+        inverse = s%@@prime
+        return self.class.new inverse
+      end
+
       def squareRoot()
 
         exponent = @@prime + BigInt.new(1)
         exponent = exponent // BigInt.new(4)
 
         result = self**exponent
+
         if result**(BigInt.new(2)) != self
           raise ArgumentError.new("element does not have a square root")
         end
+
         return result
       end
 
@@ -109,9 +110,11 @@ module CrystalPrimitives
       r_as_field_element = FieldElement.new BigInt.new 0
 
       while r_as_field_element == FieldElement.new BigInt.new 0
+
         k = Random.rand((PublicValues.q() - 1).as(Int))
         r_as_field_element = FieldElement.new(PublicValues.g()) ** k
         r = r_as_field_element.number() % PublicValues.q()
+
       end
 
       #inverse of k      
@@ -120,6 +123,7 @@ module CrystalPrimitives
 
       s =  inverse_k * (messageHash + @privateKey*r.as(BigInt))
       s = s.as(BigInt)% PublicValues.q()
+
       r = r.as(BigInt)%PublicValues.q()
 
       return r, s
@@ -140,8 +144,6 @@ module CrystalPrimitives
       puts s
       return false
     end
-
-    
 
     w = inverse_mod_q(s, q)
 

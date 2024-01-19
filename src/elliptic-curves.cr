@@ -20,17 +20,21 @@ module EllipticCurves
             @y = y
             two = BigInt.new(2)
             three = BigInt.new(3)
+
             if y**two != x**three +@@a*x + @@b
                 raise ArgumentError.new("the point is not on the curve")
             end
+
         end
 
         def self.initialize_from_x(x : FieldElement)
+
             three = BigInt.new(3)
             y = x**three + @@a*x + @@b
             y  = y.squareRoot() 
             point = self.new(x, y)
             return point
+
         end
 
         def self.initialize_infinity_point()
@@ -62,10 +66,12 @@ module EllipticCurves
 
             x, y = self.point
             x0, y0 = other.point 
-            same_point = (x==x0) && (y == y0)
 
+            same_point = (x==x0) && (y == y0)
             same_curve = self.curve == other.curve
+
             return same_point && same_curve
+
         end
 
         def +(other : EllipticCurvePoint)
@@ -99,6 +105,7 @@ module EllipticCurves
             x3 = s*s - x1 - x2
             y3 = s*(x1 - x3) - y1
             return EllipticCurvePoint.new(x3, y3)
+
         end
 
         def scalar_mul(k : BigInt) # untested
@@ -113,10 +120,13 @@ module EllipticCurves
                 partial_result = partial_result + self
                 index = index-1
             end
+
             return partial_result
         end
     end
 end
+
+
 require "spec"
 
 include EllipticCurves
@@ -128,12 +138,15 @@ describe EllipticCurves do
         it "can initialize from first coordinate x and compare to start initialization" do
             x = FieldElement.new(BigInt.new 1)
             p = EllipticCurvePoint.initialize_from_x(x)
+            
             other_point = EllipticCurvePoint.new(FieldElement.new(BigInt.new 1), FieldElement.new(BigInt.new 1024))
+
             p.should eq(other_point)
         end
 
         it "raises error if there is no point on the curve with x" do
             x = FieldElement.new(BigInt.new 2)
+
             expect_raises(ArgumentError) do
                 p = EllipticCurvePoint.initialize_from_x(x)
             end
@@ -153,6 +166,7 @@ describe EllipticCurves do
             s2 = EllipticCurvePoint.initialize_from_x(FieldElement.new(BigInt.new 1))
 
             p = s1 + s2
+
             p.should eq(s2)
         end
 
@@ -164,6 +178,7 @@ describe EllipticCurves do
             p2 = EllipticCurvePoint.new(x, y2)
 
             result = (p1 + p2).as(EllipticCurvePoint)
+
             result.is_infinity().should be_truthy
         end
 

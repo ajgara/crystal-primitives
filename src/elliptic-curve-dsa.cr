@@ -13,11 +13,8 @@ module ECDSA
     class ECDSAPublicValues
 
         @@p : BigInt = BigInt.new 131071
-
         @@G : EllipticCurvePoint = EllipticCurvePoint.new(FieldElement.new(BigInt.new(7558)), FieldElement.new(BigInt.new(115065)))
         @@generator_point_order = BigInt.new 43573
-
-
 
         def self.generator 
             @@G
@@ -33,6 +30,7 @@ module ECDSA
 
     end
 
+
     class ECDSASigner
 
         @privateKey : FieldElement
@@ -40,11 +38,11 @@ module ECDSA
         @rng : Random
     
         def initialize(rng)
-        
           @rng = rng
 
           private_key_as_int = @rng.rand(ECDSAPublicValues.order_of_generator())
           @privateKey = FieldElement.new(private_key_as_int.as(BigInt))
+          
           @publicKey = ECDSAPublicValues.generator().scalar_mul(@privateKey.number())
         end
     
@@ -55,8 +53,6 @@ module ECDSA
         def sign(messageHash : FieldElement)
             
             k = (@rng.rand(ECDSAPublicValues.p() -1).as(BigInt)) % ECDSAPublicValues.order_of_generator()
-            puts "k"
-            puts k
             z = messageHash.number % ECDSAPublicValues.order_of_generator()
 
             _R = ECDSAPublicValues.generator().scalar_mul(k)
@@ -98,40 +94,6 @@ module ECDSA
 
 end
 
-describe ECDSASigner do
-
-    it "can initialize without errors" do
-        rng = Random.new(42)
-        signer = ECDSASigner.new(rng)
-
-    end
-
-    it "can sign a message" do
-        rng = Random.new(42)
-        signer = ECDSASigner.new(rng)
-        message_hash = FieldElement.new(BigInt.new(3))
-        r, s = signer.sign(message_hash)
-        r.should eq(26152)
-        s.should eq(17952)
-        
-    end
-
-
-
-
-    it "can sign and verify a message" do
-        puts "verifying message"
-        rng = Random.new(42)
-        signer = ECDSASigner.new(rng)
-        message_hash = FieldElement.new(BigInt.new(1))
-        r, s = signer.sign(message_hash)
-
-        is_valid = eCDSA_verify_signature(signer, message_hash, r, s)
-        is_valid.should be_truthy
-    end
-
-end
-
 
 # Tests
 
@@ -139,22 +101,56 @@ require "spec"
 include ECDSA
 
 
+
+describe ECDSASigner do
+
+    it "can initialize without errors" do
+        rng = Random.new(42)
+        signer = ECDSASigner.new(rng)
+    end
+
+    it "can sign a message" do
+        rng = Random.new(42)
+        signer = ECDSASigner.new(rng)
+        message_hash = FieldElement.new(BigInt.new(3))
+
+        r, s = signer.sign(message_hash)
+
+        r.should eq(26152)
+        s.should eq(17952)
+        
+    end
+
+    it "can sign and verify a message" do
+        rng = Random.new(42)
+        signer = ECDSASigner.new(rng)
+
+        message_hash = FieldElement.new(BigInt.new(1))
+        r, s = signer.sign(message_hash)
+        is_valid = eCDSA_verify_signature(signer, message_hash, r, s)
+
+        is_valid.should be_truthy
+    end
+
+end
+
+
 describe ECDSAPublicValues do
 
     it "generator G is well defined" do
-        #G = ECDSAPublicValues.generator()
         x = FieldElement.new BigInt.new 7558
         y = FieldElement.new BigInt.new 115065
+
         g : EllipticCurvePoint = EllipticCurvePoint.new(x, y)
 
         ECDSAPublicValues.generator().should eq(g)
-        g.scalar_mul(BigInt.new 43573)
+        #g.scalar_mul(BigInt.new 43573).should eq(EllipticCurvePoint.initialize_infinity_point())
         
     end
 
     it "generator G has correct order" do
-        #G = ECDSAPublicValues.generator()
         g : EllipticCurvePoint = ECDSAPublicValues.generator()
+
         generator_point_order = BigInt.new 43573
 
         g.scalar_mul(generator_point_order).should eq(EllipticCurvePoint.initialize_infinity_point())
