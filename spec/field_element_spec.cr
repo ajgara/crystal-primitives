@@ -82,7 +82,7 @@ describe FieldElements do
   end
 end
 
-describe "euclidesAlgorithm" do
+describe "euclides_algorithm" do
   a = BigInt.new 12
   b = BigInt.new 18
   r, s = euclides_algorithm(a,b)
