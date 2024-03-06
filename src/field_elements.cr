@@ -5,10 +5,9 @@ module FieldElements
   VERSION = "0.1.0"
 
   class GF_131071
-    @@modulus : BigInt = BigInt.new 131071
-  
+    @[AlwaysInline]
     def self.modulus
-      @@modulus
+      BigInt.new 131071
     end
   end
 
