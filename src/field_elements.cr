@@ -4,12 +4,15 @@ require "big"
 module FieldElements
   VERSION = "0.1.0"
 
-  class FieldElement
-    @@prime : BigInt = BigInt.new 131071
+  abstract class FieldConfig
+    abstract def modulus()
+  end
+
+  class FieldElement(T) 
     @number : BigInt
 
     def initialize(number : BigInt)
-      @number = number % @@prime
+      @number = number % T.new.modulus()
     end
 
     def number
@@ -17,15 +20,15 @@ module FieldElements
     end
 
     def +(other : FieldElement)
-      FieldElement.new((self.number + other.number) % @@prime)
+      FieldElement(T).new((self.number + other.number) % T.new.modulus())
     end
 
     def -(other : FieldElement)
-      FieldElement.new((self.number - other.number) % @@prime)
+      FieldElement(T).new((self.number - other.number) % T.new.modulus())
     end
 
     def *(other : FieldElement)
-      FieldElement.new((self.number * other.number) % @@prime)
+      FieldElement(T).new((self.number * other.number) % T.new.modulus())
     end
 
     def ==(other : FieldElement)
@@ -33,17 +36,17 @@ module FieldElements
     end
 
     def **(exponent : BigInt)
-      FieldElement.new (self.number ** exponent) % @@prime
+      FieldElement(T).new (self.number ** exponent) % T.new.modulus()
     end
 
     def inverseOf
-      s, t = euclidesAlgorithm(self.number, @@prime)
-      inverse = s % @@prime
-      return FieldElement.new inverse
+      s, t = euclidesAlgorithm(self.number, T.new.modulus())
+      inverse = s % T.new.modulus()
+      return FieldElement(T).new inverse
     end
 
     def squareRoot
-      exponent = @@prime + BigInt.new(1)
+      exponent = T.new.modulus() + BigInt.new(1)
       exponent = exponent // BigInt.new(4)
 
       result = self ** exponent

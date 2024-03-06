@@ -2,6 +2,12 @@ require "big"
 require "./field_elements"
 
 module DSA
+  class MyFieldConfig < FieldElements::FieldConfig
+    def modulus()
+      return BigInt.new 131071
+    end
+  end
+
   class PublicValues
     @@p : BigInt = BigInt.new 131071
     @@q : BigInt = BigInt.new 257
@@ -28,11 +34,11 @@ module DSA
 
   class Signer
     @privateKey : BigInt
-    @publicKey : FieldElement
+    @publicKey : FieldElement(MyFieldConfig)
 
     def initialize
       @privateKey = Random.rand(PublicValues.q - 1)
-      @publicKey = (FieldElement.new(PublicValues.g)) ** @privateKey
+      @publicKey = (FieldElement(MyFieldConfig).new(PublicValues.g)) ** @privateKey
     end
 
     def publicKey
@@ -40,11 +46,11 @@ module DSA
     end
 
     def sign(messageHash : BigInt)
-      r_as_field_element = FieldElement.new BigInt.new 0
+      r_as_field_element = FieldElement(MyFieldConfig).new BigInt.new 0
 
-      while r_as_field_element == FieldElement.new BigInt.new 0
+      while r_as_field_element == FieldElement(MyFieldConfig).new BigInt.new 0
         k = Random.rand((PublicValues.q - 1).as(Int))
-        r_as_field_element = FieldElement.new(PublicValues.g) ** k
+        r_as_field_element = FieldElement(MyFieldConfig).new(PublicValues.g) ** k
         r = r_as_field_element.number % PublicValues.q
       end
 
@@ -79,7 +85,7 @@ module DSA
     u2 = (r*w) % q
 
     # computation of v
-    g = FieldElement.new PublicValues.g
+    g = FieldElement(MyFieldConfig).new PublicValues.g
     factor1 = (g**u1)
     factor2 = (signer.publicKey**u2)
     v = ((factor1 * factor2).number) % q
