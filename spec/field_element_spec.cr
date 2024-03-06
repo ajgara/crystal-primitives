@@ -53,14 +53,14 @@ describe FieldElements do
   describe "#squareroot" do
     it "can do the squareroot of 2" do
       x = FieldElement(GF_131071).new BigInt.new 2
-      sqrtX = x.squareRoot()
+      sqrtX = x.square_root()
       two = BigInt.new(2)
       (sqrtX**two).should eq(x)
     end
 
     it "can do the squareroot of 100" do
       x = FieldElement(GF_131071).new BigInt.new 100
-      sqrtX = x.squareRoot()
+      sqrtX = x.square_root()
       two = BigInt.new(2)
       (sqrtX**two).should eq(x)
     end
@@ -68,14 +68,14 @@ describe FieldElements do
     it "raises error if field element does not have squareroot" do
       x = FieldElement(GF_131071).new BigInt.new 3
       expect_raises(ArgumentError) do
-        sqrtX = x.squareRoot()
+        sqrtX = x.square_root()
       end
     end
   end
 
   it "can do the inverse" do
     x = FieldElement(GF_131071).new BigInt.new 2
-    inverse = x.inverseOf()
+    inverse = x.inverse_of()
     (x*inverse).should eq(FieldElement(GF_131071).new BigInt.new 1)
   end
 
@@ -85,6 +85,6 @@ end
 describe "euclidesAlgorithm" do
   a = BigInt.new 12
   b = BigInt.new 18
-  r, s = euclidesAlgorithm(a,b)
+  r, s = euclides_algorithm(a,b)
   (r*a + s*b).should eq(BigInt.new 6)
 end

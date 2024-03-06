@@ -49,7 +49,7 @@ module DSA
       end
 
       # inverse of k
-      inverse_k, t = euclidesAlgorithm(k.as(BigInt), PublicValues.q)
+      inverse_k, t = euclides_algorithm(k.as(BigInt), PublicValues.q)
       inverse_k = inverse_k % PublicValues.q
 
       s = inverse_k * (messageHash + @privateKey*r.as(BigInt))

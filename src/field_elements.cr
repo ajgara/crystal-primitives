@@ -42,13 +42,13 @@ module FieldElements
       FieldElement(T).new (self.number ** exponent) % T.modulus
     end
 
-    def inverseOf
-      s, t = euclidesAlgorithm(self.number, T.modulus)
+    def inverse_of
+      s, t = euclides_algorithm(self.number, T.modulus)
       inverse = s % T.modulus
       return FieldElement(T).new inverse
     end
 
-    def squareRoot
+    def square_root
       exponent = T.modulus + BigInt.new(1)
       exponent = exponent // BigInt.new(4)
 
@@ -67,7 +67,7 @@ module FieldElements
   end
 end
 
-def euclidesAlgorithm(a : BigInt, b : BigInt)
+def euclides_algorithm(a : BigInt, b : BigInt)
   r0 = a
   r1 = b
 
@@ -97,7 +97,7 @@ def euclidesAlgorithm(a : BigInt, b : BigInt)
 end
 
 def inverse_mod_q(number : BigInt, mod : BigInt)
-  inverse, t = euclidesAlgorithm(number, mod)
+  inverse, t = euclides_algorithm(number, mod)
   inverse = inverse % mod
   return inverse
 end
