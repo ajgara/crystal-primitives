@@ -6,7 +6,6 @@ include CrystalPrimitives
 include EllipticCurves
 
 
-
 module ECDSA
     VERSION = "0.1.0"
 

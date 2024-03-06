@@ -1,2 +1,3 @@
 require "spec"
-require "../src/crystal-primitives"
+require "../src/field_elements"
+require "../src/dsa"

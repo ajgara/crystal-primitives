@@ -1,11 +1,8 @@
 require "./spec_helper"
 
-include CrystalPrimitives
+include FieldElements
 
-describe CrystalPrimitives do
-
-
-
+describe FieldElements do
 
   describe "#==" do
     
@@ -84,54 +81,11 @@ describe CrystalPrimitives do
   end
 
   end
+end
 
-
-  describe "#PublicValues" do
-    
-    it "q is well defined" do
-      ((PublicValues.p() -1)%PublicValues.q()).should eq(0)
-    end
-
-    it "z is well defined" do
-      ((PublicValues.p() - 1)/PublicValues.q).should eq(PublicValues.z)
-    end
-
-    it "generator g is well defined" do
-      (PublicValues.g).should be > 1
-    end
-
-  end
-
-
-  describe "#Signer" do
-
-    it "it initializes and signs a message without errors" do
-      signer = Signer.new
-      signer.sign(BigInt.new 100)
-    end
-
-
-  end
-
-  describe "#verify" do
-
-    it "should be false if signature is too large" do
-      signer = Signer.new
-      message = BigInt.new 100
-      r, s = signer.sign(message)
-
-      result = verify_signature(signer, BigInt.new(300), BigInt.new(300), message)
-      result.should be_falsey
-    end
-
-    it "should verify well signed message" do
-      signer = Signer.new
-      message = BigInt.new 100
-      r, s = signer.sign(message)
-
-      result = verify_signature(signer, r.as(BigInt), s.as(BigInt), message)
-      result.should be_truthy
-    end
-  end
-
+describe "euclidesAlgorithm" do
+  a = BigInt.new 12
+  b = BigInt.new 18
+  r, s = euclidesAlgorithm(a,b)
+  (r*a + s*b).should eq(BigInt.new 6)
 end

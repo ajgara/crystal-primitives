@@ -1,5 +1,8 @@
-# crystal-primitives
+# Crystal primitives
+A proof of concept of cryptographic primitives written in Crystal. To run the tests:
 
-TODO:
+```bash
+$ crystal spec
+```
 
-intentando definir los puntos desde la curva desde un X. me tira error en la creacion de la curva cuando yo esperaria que el error es de la raiz cuadrada. me gustaria imprimir el error desde el test y no puedo
+You can install Crystal by following [these](https://crystal-lang.org/install/on_ubuntu/) instructions.
